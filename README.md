@@ -2,7 +2,7 @@
 [![PyPI](https://img.shields.io/pypi/v/plover-dictionary-patch)](https://pypi.org/project/plover-dictionary-patch/)
 ![GitHub](https://img.shields.io/github/license/Kaoffie/plover_dictionary_patch)
 
-**Dictionary Patches** are patch files that allow you to patch JSON dictionaries without editing the original files. This is useful if the base dictionary file is from an external source.
+**Dictionary Patches** are patch files that allow you to patch JSON dictionaries without editing the original files. This is useful if the base dictionary file is from an external source, such as the default `main.json` dictionary from Plover.
 
 ## Usage
 
@@ -11,11 +11,11 @@
   "source": "main.json",
   "add": {
     "SKWR": "just",
-    "STKEURBGS": "dictionary"
+    "TKEURBGS": "dictionary"
   },
   "delete": [
     "SHRAOEP/HRES",
-    "PET/ROL"
+    "TOED/AS"
   ]
 }
 ```

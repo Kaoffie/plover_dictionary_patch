@@ -54,8 +54,6 @@ class DictionaryPatch(StenoDictionary):
             key=lambda outline: steno_to_sort_key(outline)
         )
 
-        print("deletions", deletions)
-
         additions = dict()
         for outline, translation in self.items():
             if (
@@ -69,8 +67,6 @@ class DictionaryPatch(StenoDictionary):
             key=lambda kv: steno_to_sort_key(kv[0])
         ))
 
-        print("add mappings", add_mappings)
-
         save_data = {
             SOURCE: self._source_name,
             ADD: add_mappings,
@@ -78,7 +74,6 @@ class DictionaryPatch(StenoDictionary):
         }
 
         with open(filename, "w", encoding="utf-8") as fp:
-            print("opening to dump")
             json.dump(
                 save_data, 
                 fp, 
