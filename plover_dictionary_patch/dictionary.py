@@ -8,6 +8,7 @@ from plover.steno import normalize_steno, steno_to_sort_key
 
 PATCH_EXT = "dicp"
 SOURCE = "source"
+TARGET = "target"
 ADD = "add"
 DELETE = "delete"
 
@@ -30,20 +31,29 @@ class DictionaryPatch(StenoDictionary):
                 os.path.dirname(filename), 
                 self._source_name
             )
-            
-            source_dict = JsonDictionary.load(self._source_path)
-            self.update(source_dict)
-        
-            additions = json_data[ADD]
-            self.update(
-                (normalize_steno(outline), translation)
-                for outline, translation
-                in additions.items()
-            )
 
-            deletions = json_data[DELETE]
-            for del_key in deletions:
-                self._dict.pop(normalize_steno(del_key), None)
+            if TARGET in json_data:
+                target_path = os.path.join(
+                    os.path.dirname(filename),
+                    json_data[TARGET]
+                )
+                target_dict = JsonDictionary.load(target_path)
+                self.update(target_dict)
+            
+            else:
+                source_dict = JsonDictionary.load(self._source_path)
+                self.update(source_dict)
+            
+                additions = json_data[ADD]
+                self.update(
+                    (normalize_steno(outline), translation)
+                    for outline, translation
+                    in additions.items()
+                )
+
+                deletions = json_data[DELETE]
+                for del_key in deletions:
+                    self._dict.pop(normalize_steno(del_key), None)
 
     def _save(self, filename: str) -> None:
         source_dict = JsonDictionary.load(self._source_path)
