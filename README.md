@@ -32,15 +32,28 @@ When using dictionary patches, you are recommended to disable the base dictionar
 
 To update the base file, simply replace the original base file with the updated version with the same file name, and the patch will work as usual.
 
-## Using existing edits
+## Converting dictionaries to Patches
 
 If you already have a regular JSON dictionary that contains edits from an original dictionary file, you can create a patch file like this, with a `target` parameter containing the name of the edited dictionary file.
 
 ```json
 {
   "source": "main.json",
-  "target": "self_main.json"
+  "target": "edited_main.json"
 }
 ```
 
 The next time you edit the patch, the file will be expanded into its regular additions/deletions format in the example above. You are recommended to keep a backup of the original edited dictionary.
+
+## Converting Patches to Dictionaries
+
+If you would like to create a copy of the edited dictionary in JSON format, simply add a `generate` parameter containing the name of the output file:
+
+```json
+{
+  "generate": "edited_dict.json",
+  ...
+}
+```
+
+The edited dictionary will be generated as a JSON dictionary every time you update the patch from within Plover.

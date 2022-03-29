@@ -9,6 +9,7 @@ from plover.steno import normalize_steno, steno_to_sort_key
 PATCH_EXT = "dicp"
 SOURCE = "source"
 TARGET = "target"
+GENERATE = "generate"
 ADD = "add"
 DELETE = "delete"
 
@@ -21,6 +22,8 @@ class DictionaryPatch(StenoDictionary):
         super().__init__()
         self._source_name = None
         self._source_path = None
+        self._generate_name = None
+        self._generate_path = None
 
     def _load(self, filename: str) -> None:
         with open(filename, "r", encoding="utf-8") as fp:
@@ -31,6 +34,15 @@ class DictionaryPatch(StenoDictionary):
                 os.path.dirname(filename), 
                 self._source_name
             )
+
+            if GENERATE in json_data:
+                self._generate_name = json_data[GENERATE]
+                self._generate_path = os.path.join(
+                    os.path.dirname(filename),
+                    self._generate_name
+                )
+
+                print("Generated", self._generate_path, self._generate_name)
 
             if TARGET in json_data:
                 target_path = os.path.join(
@@ -83,6 +95,14 @@ class DictionaryPatch(StenoDictionary):
             DELETE: deletions
         }
 
+        if self._generate_path and self._generate_name:
+            print("Generating")
+            save_data = {GENERATE: self._generate_name, **save_data}
+            gen_dict = JsonDictionary()
+            gen_dict.path = self._generate_path
+            gen_dict.update(self)
+            gen_dict.save()
+
         with open(filename, "w", encoding="utf-8") as fp:
             json.dump(
                 save_data, 
@@ -92,3 +112,7 @@ class DictionaryPatch(StenoDictionary):
                 separators=(",", ": ")
             )
             fp.write("\n")
+
+    @classmethod
+    def create(cls, _) -> None:
+        raise ValueError("Dictionary Patches do not support creation")
